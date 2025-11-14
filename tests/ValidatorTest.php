@@ -35,4 +35,30 @@ class ValidatorTest extends TestCase
         $result = $v->string()->minLength(10)->minLength(5)->isValid('Hexlet');
         $this->assertTrue($result, 'Valid string');
     }
+
+    public function testNumber(): void
+    {
+        $v = new \Hexlet\Validator\Validator();
+
+        $schema = $v->number();
+
+        $this->assertTrue($schema->isValid(null), 'Null should be valid');
+
+        $schema->required();
+
+        $this->assertFalse($schema->isValid(null), 'Null should be invalid when required');
+
+        $this->assertTrue($schema->isValid(7), '7  should be valid');
+
+        $result = $schema->positive()->isValid(10);
+        $this->assertTrue($result, '10 positive  should be valid');
+
+        $schema->range(-5, 5);
+
+        $result = $schema->isValid(-3);
+        $this->assertFalse($result, '-3 not positive');
+
+        $result = $schema->isValid(5);
+        $this->assertTrue($result, '5 in [-5;5] and positive valid');
+    }
 }
