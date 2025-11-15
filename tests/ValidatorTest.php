@@ -61,4 +61,23 @@ class ValidatorTest extends TestCase
         $result = $schema->isValid(5);
         $this->assertTrue($result, '5 in [-5;5] and positive valid');
     }
+
+    public function testArray(): void
+    {
+        $v = new \Hexlet\Validator\Validator();
+
+        $schema = $v->array();
+
+        $this->assertTrue($schema->isValid(null), 'Null should be valid');
+
+        $schema = $schema->required();
+
+        $this->assertTrue($schema->isValid([]), 'Empty array is valid');
+        $this->assertTrue($schema->isValid(['hexlet']), 'Array is valid');
+
+        $schema->sizeof(2);
+
+        $this->assertFalse($schema->isValid(['hexlet']), 'Size not valid');
+        $this->assertTrue($schema->isValid(['hexlet', 'code-basics']), 'Array is valid size right');
+    }
 }
