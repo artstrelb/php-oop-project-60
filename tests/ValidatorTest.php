@@ -80,4 +80,28 @@ class ValidatorTest extends TestCase
         $this->assertFalse($schema->isValid(['hexlet']), 'Size not valid');
         $this->assertTrue($schema->isValid(['hexlet', 'code-basics']), 'Array is valid size right');
     }
+
+    public function testSchape(): void
+    {
+        $v = new \Hexlet\Validator\Validator();
+
+        $schema = $v->array();
+
+        $schema->shape([
+            'name' => $v->string()->required(),
+            'age' => $v->number()->positive(),
+        ]);
+
+        $result = $schema->isValid(['name' => 'kolya', 'age' => 100]);
+        $this->assertTrue($result, 'Array should be valid');
+
+        $result = $schema->isValid(['name' => 'maya', 'age' => null]);
+        $this->assertTrue($result, 'Array should be valid');
+
+        $result = $schema->isValid(['name' => '', 'age' => null]);
+        $this->assertFalse($result, 'Array should not be valid');
+
+        $result = $schema->isValid(['name' => 'ada', 'age' => -5]);
+        $this->assertFalse($result, 'Array should not be valid');
+    }
 }
