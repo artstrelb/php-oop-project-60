@@ -7,12 +7,16 @@ class ArraySchema
     private bool $required;
     private int $size;
     private mixed $shape;
+    private mixed $validators;
+    private mixed $fn;
 
-    public function __construct()
+    public function __construct(mixed $validators)
     {
         $this->required = false;
         $this->size = 0;
         $this->shape = [];
+        $this->validators = $validators;
+        $this->fn = null;
     }
 
     public function required(): self
@@ -56,6 +60,22 @@ class ArraySchema
             }
         }
 
+        if (is_callable($this->fn)) {
+            $fn = $this->fn;
+            return $fn($v);
+        }
+
         return true;
+    }
+
+    public function test(string $name, mixed $value): self
+    {
+        $fn = $this->validators[$name];
+
+        $this->fn = function ($testValue) use ($fn, $value) {
+            return $fn($testValue, $value);
+        };
+
+        return $this;
     }
 }

@@ -104,4 +104,33 @@ class ValidatorTest extends TestCase
         $result = $schema->isValid(['name' => 'ada', 'age' => -5]);
         $this->assertFalse($result, 'Array should not be valid');
     }
+
+    public function customValidator(): void
+    {
+        $v = new \Hexlet\Validator\Validator();
+
+        $fn = fn($value, $start) => str_starts_with($value, $start);
+
+        $v->addValidator('string', 'startWith', $fn);
+
+        // Новые валидаторы вызываются через метод test
+        $schema = $v->string()->test('startWith', 'H');
+
+        $result = $schema->isValid('exlet');
+        $this->assertFalse($result, 'exlet not start with H');
+
+        $result = $schema->isValid('Hexlet');
+        $this->assertTrue($result, 'Hexlet start with H');
+
+        $fn = fn($value, $min) => $value >= $min;
+        $v->addValidator('number', 'min', $fn);
+
+        $schema = $v->number()->test('min', 5);
+
+        $result = $schema->isValid(4);
+        $this->assertFalse($result, '4 >= 5 is false');
+
+        $result = $schema->isValid(6); // true
+        $this->assertTrue($result, '6 >= 5 is true');
+    }
 }
