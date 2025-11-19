@@ -46,7 +46,7 @@ class NumberSchema
     public function isValid(?int $v): bool
     {
         if ($this->required) {
-            if (empty($v)) {
+            if ($v === null) {
                 return false;
             }
         }

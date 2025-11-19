@@ -46,17 +46,15 @@ class ArraySchema
             return false;
         }
 
-        if ($this->size) {
-            if (count($v) != $this->size) {
+        if ($this->size !== 0) {
+            if (count($v) !== $this->size) {
                 return false;
             }
         }
 
-        if ($this->shape) {
-            foreach ($this->shape as $key => $schema) {
-                if (!$schema->isValid($v[$key])) {
-                    return false;
-                }
+        foreach ($this->shape as $key => $schema) {
+            if (!$schema->isValid($v[$key])) {
+                return false;
             }
         }
 
