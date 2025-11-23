@@ -43,17 +43,17 @@ class StringSchema
     public function isValid(?string $str): bool
     {
         if ($this->required) {
-            if (empty($str)) {
+            if ($str === null || $str === '') {
                 return false;
             }
         }
-        if ($this->minLength) {
-            if (!empty($str) && mb_strlen($str) < $this->minLength) {
+        if ($this->minLength !== 0) {
+            if ($str !== null && mb_strlen($str) < $this->minLength) {
                 return false;
             }
         }
-        if (!empty($this->contains)) {
-            if (empty($str) || !str_contains($str, $this->contains)) {
+        if ($this->contains !== null && $this->contains !== '') {
+            if ($str === null || !str_contains($str, $this->contains)) {
                 return false;
             }
         }
