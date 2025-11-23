@@ -52,7 +52,7 @@ class StringSchema
                 return false;
             }
         }
-        if ($this->contains !== null && $this->contains !== '') {
+        if ($this->contains !== '') {
             if ($str === null || !str_contains($str, $this->contains)) {
                 return false;
             }
